@@ -1,4 +1,4 @@
-var React = require('react');
+import React, {Component} from 'react';
 var PropTypes = require('prop-types');
 import { Route, Redirect } from 'react-router'
 import {types, actions, authReducer} from '../redux/auth'
@@ -10,9 +10,9 @@ import {BASE_API} from '../global/url'
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   login: () => dispatch(actions.login()),
-  failed: () => dispatch(messageactions.failed()),
-  loading: () => dispatch(messageactions.loading()),
-  success: () => dispatch(messageactions.success()),
+  failed: (msg) => dispatch(messageactions.failed(msg)),
+  loading: (msg) => dispatch(messageactions.loading(msg)),
+  success: (msg) => dispatch(messageactions.success(msg)),
   reset: () => dispatch(messageactions.reset())
 
 })
@@ -23,7 +23,7 @@ const mapStateToProps = ({authReducer,messageReducer}) => {
 }
 
 
-class Login extends React.Component {
+class Login extends Component {
 
 
 
@@ -58,10 +58,12 @@ class Login extends React.Component {
         return response
       }).then(
         function(result){
+
           if(result.data.success){
             var data = result.data.data
             console.log(result.data.msg)
             localStorage.setItem('email', data.email);
+            localStorage.setItem('displayName', data.DisplayName);
             localStorage.setItem('id', data.userid);
             localStorage.setItem('user_auth', data.user_auth);
             localStorage.setItem('type', data.usertype);
@@ -75,17 +77,9 @@ class Login extends React.Component {
         }
       ).catch(function(error){
 
-        console.log(error)
+        self.props.failed("Sorry but error occurred")
 
       })
-
-
-
-
-
-
-
-
 
   }
   handleChange(event){

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddAccountCreatedUpdated extends Migration
+class PointtypeAddSpecialEducation extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class AddAccountCreatedUpdated extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('account', function (Blueprint $table) {
-          $table->string('created_at');
-          $table->string('updated_at');
-        });
+        //add special education on pointtype table
+        DB::table('pointtype')->insert(
+          ['name' => 'Special Education', 'note' => '10 points','formname'=>'SpecialEducation']
+        );
     }
 
     /**

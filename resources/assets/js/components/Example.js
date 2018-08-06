@@ -13,13 +13,22 @@ import { Provider } from 'react-redux'; //to include the store
 
 import {types, actions, authReducer} from '../redux/auth'
 import {messageReducer} from '../redux/message'
+import {actions as employeeActions, employeeReducer} from '../redux/employee'
+import {actions as selectActions, selectReducer} from '../redux/select'
 
 
 import Header from './Header' //separate header
 import Message from './Message' //separate header
 
 import Employee from './Employee'
+import Detail from './Detail'
+import CreateClient from './CreateClient'
+import CreateEmployee from './CreateEmployee'
+import UpdateEmployee from './UpdateEmployee'
 
+import axios from 'axios'
+
+import {BASE_API} from '../global/url'
 
 
 const mapStateToProps = (authReducer) => {
@@ -31,7 +40,9 @@ const mapStateToProps = (authReducer) => {
 }
 const reducer = combineReducers({
 	authReducer,
-	messageReducer
+	messageReducer,
+	employeeReducer,
+	selectReducer
 
 })
 const loggerMiddleware = createLogger()
@@ -88,7 +99,12 @@ export default class Example extends Component {
                   <Switch>
                         <PrivateRoute exact path="/" component={Home} />
 												<PrivateRoute path="/Employee" component={Employee} />
+												<PrivateRoute path="/Detail/:id/:type" component={Detail} />
+												<PrivateRoute path="/CreateClient" component={CreateClient} />
+												<PrivateRoute path="/CreateEmployee" component={CreateEmployee} />
+												<PrivateRoute path="/UpdateEmployee/:id" component={UpdateEmployee} />
                         <Route path="/Login" component={Login}/>
+                        <Route path="/Register" component={CreateClient}/>
                   </Switch>
 
 
@@ -100,7 +116,20 @@ export default class Example extends Component {
         );
     }
     componentDidMount(){
+			var self = this;
       console.log(localStorage.getItem('user_auth'))
+
+			//employees data
+			axios.get(BASE_API+"employeedata/0")
+			.then(res => res)
+			.then(function(response){
+				var employees = response.data.data
+				console.log("employees",employees)
+				store.dispatch(employeeActions.all(employees))
+
+			}).catch(function(error){
+				console.log(error)
+			})
     }
 
 }

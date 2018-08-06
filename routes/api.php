@@ -1,7 +1,12 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Account;
+use App\Client;
+use App\Note;
+
+use App\Mail\EmailMigration;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,41 +32,325 @@ Route::get('/account', function(){
     $response = ['success'=>true, 'data'=>$users];
     return response()->json($response, 201);
 });
-Route::get('/clientdata', function(){
+//single client data to be displayed in the detail page
+Route::get('/singleclient/{id}', function($id){
+
+    $clients = DB::table('user')->where("UserID",$id);
+
+    $clients =$clients->get();
+
+    if($clients){
+      $response = ['success'=>true, 'data'=>$clients[0]];
+    }else{
+      $response = ['success'=>false,'msg'=>"some error occurred"];
+    }
+
+    return response()->json($response, 201);
+});
+//client data to be displayed in the home page
+Route::get('/clientdata/{consultantId}', function($consultantId){
 
     $clients = DB::table('user');
     $clients =$clients
-            ->selectRaw(DB::raw("user.UserID as clientId, FirstName, LastName, PreferName, DateofBirth, Nationality, Gender, Mobile, user.Email, CurrentStatus, Vexpiry, Course, tim, account.DisplayName as DisplayName, urgent, know, account.UserID,duedate,user.Created"))
+            ->selectRaw(DB::raw("user.UserID as clientId, FirstName, LastName, DateofBirth, Nationality, Mobile, user.Email, CurrentStatus, Vexpiry, Course, tim, account.DisplayName as DisplayName, urgent, know, account.UserID,duedate,user.Created,uni_Compl"))
             ->leftjoin(DB::raw("(SELECT MAX(Time) as tim, UserID FROM `contact` GROUP BY UserID) con"), 'user.UserID', '=', 'con.UserID')
             ->leftjoin('account', 'account.UserID', '=', 'user.ConsultantID')
-            ->orderBy('user.created','Desc')->get();
+            ->orderBy('user.created','Desc');
+    if(!empty($consultantId)){
+      $clients =$clients->where("ConsultantID", $consultantId);
+    }
+    $clients =$clients->get();
     $response = ['success'=>true, 'data'=>$clients];
     return response()->json($response, 201);
 });
+//updating client data
+Route::put('/updateclient/{id}', function($id,Request $data){
 
-Route::put('/updateclient/{id}/{data}', function($id,$data){
-
-    //unserialized the data
-
-
-
-    $unserialized = json_decode($data, true);
-
-    $client = App\Client::where("UserID",$id);
-
-
-
-    if($client->update($unserialized)){
-      $response = ['success'=>true,'msg'=>'success updating client data', 'data'=>$unserialized];
+    $client = DB::table('user')->where("UserID",$id);
+    //all is to convert data to array
+    if($client->update($data->all())){
+      $response = ['success'=>true,'msg'=>'success updating client data', 'data'=>$data];
     }else{
-      $response = ['success'=>false,'msg' =>'success updating client data', 'data'=>$unserialized];
+      $response = ['success'=>false,'msg' =>'Failed updating client data', 'data'=>$data];
+    }
+    return response()->json($response, 201);
+});
+//looking for spesific client data
+Route::post('/clientcustomdata/{id}', function($id,Request $request){
+
+    $clients = DB::table('user')->where($request->all());
+
+    //if it comes to creating client it doe not need id but if it comes to update it need
+    if(!empty($id)){
+      $clients->where("UserID","<>",$id);
     }
 
+    $response = [];
+    if($clients = $clients->get()){
+      $response= ['success'=>true, 'data'=>$clients];
+    }else{
+      $response= ['success'=>false];
+    }
 
+    return response()->json($response, 201);
+});
+//testing purpose
+Route::post('/clientcustomdata2/{id}', function($id,Request $request){
+
+    //if it comes to creating client it doe not need id but if it comes to update it need
+
+    $response= ['success'=>true, 'id' =>$id,'data'=>$request->all()];
+    return response()->json($response, 201);
+});
+//creating client data
+Route::post('/createclient', function(Request $data){
+    //all is to convert data to array
+    if($created = App\Client::create($data->all())){
+      $response = ['success'=>true,'msg'=>'success creating client data', 'data'=>$created->UserID];
+    }else{
+      $response = ['success'=>false,'msg' =>'Failed creating client data'];
+    }
+    return response()->json($response, 201);
+});
+//creating client data
+Route::post('/createemployee', function(Request $data){
+    //all is to convert data to array
+    $data = $data->all();
+    $data["password"] = md5($data["password"]);
+    if($created = App\Account::create($data)){
+      $response = ['success'=>true,'msg'=>'success creating employee data', 'data'=>$created->UserID];
+    }else{
+      $response = ['success'=>false,'msg' =>'Failed creating employee data'];
+    }
+    return response()->json($response, 201);
+});
+//updating client data
+Route::put('/updateemployee/{id}', function($id,Request $data){
+    $data = $data->all();
+    if(isset($data["password"])){
+      $data["password"] = md5($data["password"]);
+    }
+    $employee = DB::table('account')->where("UserID",$id);
+    //all is to convert data to array
+    if($employee->update($data)){
+      $response = ['success'=>true,'msg'=>'success updating employee data', 'data'=>$employee];
+    }else{
+      $response = ['success'=>false,'msg' =>'Failed updating employee data', 'data'=>$employee];
+    }
+    return response()->json($response, 201);
+});
+
+//single client data to be displayed in the detail page
+Route::get('/singleemployee/{id}', function($id){
+
+    $employee = DB::table('account')->where("UserID",$id);
+
+    $employee =$employee->get();
+
+    if($employee){
+      $response = ['success'=>true, 'data'=>$employee[0]];
+    }else{
+      $response = ['success'=>false,'msg'=>"some error occurred"];
+    }
 
     return response()->json($response, 201);
 });
 
+//get employee data
+Route::get('/employeedata/{not_manager}', function($not_manager){
+
+    $employees = DB::table('account');
+    if($not_manager){
+      $employees->where("UserType","!=","MANAGER");
+    }
+    $employees = $employees->get();
+    $response = ['success'=>true, 'data'=>$employees];
+    return response()->json($response, 201);
+});
+
+// //get employee data
+// Route::post('/employeecustomdata/{not_manager}', function($not_manager){
+//
+//     $employees = DB::table('account');
+//     if($not_manager){
+//       $employees->where("UserType","!=","MANAGER");
+//     }
+//     $employees = $employees->get();
+//     $response = ['success'=>true, 'data'=>$employees];
+//     return response()->json($response, 201);
+// });
+
+//get notes of one client
+Route::get('/note/{clientid}', function($clientid){
+
+    $notes = DB::table('contact')
+        ->join('account','contact.writer', '=', 'account.UserID')
+        ->where('contact.UserID', '=', $clientid);
+    $responses = [];
+    if($notes = $notes->get()){
+      $response = ['success'=>true, 'data'=>$notes];
+    }else{
+      $response = ['success'=>false];
+    }
+    return response()->json($response, 201);
+});
+//update note
+Route::put('/updatenote/{id}', function($id,Request $request){
+
+    $notes = App\Note::Where("ID",$id);
+    $responses = [];
+    if($notes->update($request->all())){
+      $response = ['success'=>true, 'data'=>$notes];
+    }else{
+      $response = ['success'=>false];
+    }
+    return response()->json($response, 201);
+});
+// create note based on the one who write , content and the date
+Route::post('/createnote', function(Request $request){
+
+    if(App\Note::create($request->all())){
+      $response = ['success'=>true, 'msg'=>"Successfully create note"];
+    }else{
+      $response = ['success'=>false,'msg'=>"Failed create note"];
+    }
+    return response()->json($response, 201);
+});
+
+//get pte data of one client
+Route::get('/migration/{clientid}', function($clientid){
+    //calculating the pte scores data for handling the new pointtype data which has not been added
+    $ptedata = DB::select("SELECT * FROM pointtype LEFT JOIN clientpoint ON pointtype.id = clientpoint.pointid AND clientpoint.clientid =".$clientid);
+    //to check wether the data exists or not
+    $notnull_ptedata = DB::select("SELECT * FROM pointtype LEFT JOIN clientpoint ON pointtype.id = clientpoint.pointid WHERE clientpoint.clientid =".$clientid);
+    $responses = [];
+    if($ptedata){
+      $typedata = [];
+
+      if(count($notnull_ptedata) == 0){
+        //if the data does not exist yet
+        $typedata = DB::table('pointtype')->get();
+        //assign type with type data and data to empty array
+        $response = ['success'=>true, 'data'=>[], 'type'=>$typedata];
+      }else{
+        //if the data exists
+
+        // assign the type to $ptedata and type to empty array
+        $response = ['success'=>true, 'data'=>$ptedata, 'type'=>[]];
+      }
+
+    }else{
+      $response = ['success'=>false];
+    }
+    return response()->json($response, 201);
+});
+
+//get education data of one client
+Route::get('/education/{clientid}', function($clientid){
+  $education = DB::table('education')->where("UserID",$clientid);
+  if ($education = $education->get()) {
+    $response = ['success'=>true, 'msg'=>"Successfully get education data",'education'=>$education];
+  }else{
+    $response = ['success'=>false,'msg'=>"Failed create ptedata"];
+  }
+  return response()->json($response, 201);
+});
+//insert education data of one client
+Route::post('/educationinsert', function(Request $request){
+  $education = DB::table('education');
+  if ($education->insert($request->all())) {
+    $response = ['success'=>true, 'msg'=>"Successfully insert new education data"];
+  }else{
+    $response = ['success'=>false,'msg'=>"Failed create education data"];
+  }
+  return response()->json($response, 201);
+});
+//update education data
+Route::put('/educationupdate/{id}', function($id,Request $request){
+
+    $education_update = DB::table('education')->where("id",$id);
+    $responses = [];
+    if($education_update->update($request->all())){
+      $response = ['success'=>true, 'msg'=>"Successfully update new education data", 'data'=>$education_update];
+    }else{
+      $response = ['success'=>false, 'msg'=>"Failed update new education data"];
+    }
+    return response()->json($response, 201);
+});
+//create new pte data
+Route::post('/migrationinsert',function(Request $request){
+  $response = [];
+  if (DB::table('clientpoint')->insert($request->all())) {
+    $response = ['success'=>true, 'msg'=>"Successfully create new pte data"];
+  }else{
+    $response = ['success'=>false,'msg'=>"Failed create ptedata"];
+  }
+  return response()->json($response, 201);
+});
+
+//update pte data
+Route::put('/migrationupdate/{clientid}',function($clientid,Request $request){
+  $response = [];
+  $update_data = $request->all();
+  $success = true;
+  // iterating each of the data one by one because laravel only allow 1 data update at a time
+  foreach ($update_data as $value) {
+    //handling new pointtype data which has not been added to the clientpoint before by inserting and initialize the value to 0
+    if(count(DB::table('clientpoint')->where('pointid',$value['pointid'])->get()) == 0){
+      DB::table('clientpoint')->insert(['pointid'=>$value['pointid'],'current'=>0,'goal'=>0,'clientid'=>$clientid]);
+    }
+    if(DB::table('clientpoint')
+            ->where('clientid', $clientid)
+            ->where('pointid',$value['pointid'])
+            ->update($value)){
+        $success = true;
+    }else{
+        $success = false;
+    }
+
+
+  }
+  $response = ['success'=>true, 'msg'=>"Successfully update new pte data"];
+  // if (!$success) {
+  //   $response = ['success'=>true, 'msg'=>"Successfully update new pte data"];
+  // }else{
+  //   $response = ['success'=>false,'msg'=>"Failed create ptedata"];
+  // }
+  return response()->json($response, 201);
+});
+
+
+//route used for sending an email for migration purposes
+Route::post('/sendmigrationemail/{clientid}',function($clientid,Request $request){
+  $client = App\Client::find($clientid);
+  //calculating the pte scores data for handling the new pointtype data which has not been added
+  $ptedata = DB::select("SELECT * FROM pointtype LEFT JOIN clientpoint ON pointtype.id = clientpoint.pointid AND clientpoint.clientid =".$clientid);
+
+
+  $data = [
+            "from"=>[
+                'address' => $request["sender"]["email"],
+                'name' =>$client->Email,
+            ],
+            "to"=>$client->Email
+
+          ];
+  if(
+        Mail::send(new EmailMigration($request->sender,$request->content,$client,$ptedata),$data,
+        function($message) use ($data){
+
+          $message->to( $data['to'],"Stefan Derian" );
+          $message->from( $data['from'] );
+          $message->subject( 'Your Point Test Update and feedback' );
+        }
+      )
+    ){
+    $response = ['success'=>true, 'msg'=>"Successfully send the email"];
+  }else{
+    $response = ['success'=>false, 'msg'=>"failed sending the email"];
+  }
+  return response()->json($response, 201);
+});
 
 Route::group(['middleware' => ['api-header']], function () {
 

@@ -33,9 +33,9 @@ class Message extends React.Component {
     return(
       <div>
 
-          {this.props.status == 2 &&<Alert color="success"> {this.props.message} </Alert>}
-          {this.props.status == 1 &&<Alert color="warning"> {this.props.message} </Alert>}
-          {this.props.status == 0 &&<Alert color="danger"> {this.props.message} </Alert>}
+          {this.props.status == 2 &&<Alert className ="fixed" color="success"> {this.props.msg} </Alert>}
+          {this.props.status == 1 &&<Alert className ="fixed" color="warning"> {this.props.msg} </Alert>}
+          {this.props.status == 0 &&<Alert className ="fixed" color="danger"> {this.props.msg} </Alert>}
 
 
 
@@ -53,12 +53,12 @@ class Message extends React.Component {
   shouldComponentUpdate(nextProps, nextState){
     var self = this;
 		if(nextState!== this.state || nextProps!== this.props){
-			if(nextProps.status == 2){
-        self.sleep(5000).then(()=>{
-          self.props.reset()
-        })
 
-			}
+      self.sleep(5000).then(()=>{
+        self.props.reset()
+      })
+
+
 			return true
 		}
 		return false

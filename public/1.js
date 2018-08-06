@@ -1,17 +1,19 @@
 webpackJsonp([1],{
 
-/***/ 160:
+/***/ 308:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(185);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__redux_auth__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__redux_message__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__global_url__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__redux_auth__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__redux_message__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_redux__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__global_url__ = __webpack_require__(9);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -22,7 +24,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var React = __webpack_require__(0);
+
 var PropTypes = __webpack_require__(1);
 
 
@@ -35,19 +37,19 @@ var PropTypes = __webpack_require__(1);
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     return {
         login: function login() {
-            return dispatch(__WEBPACK_IMPORTED_MODULE_1__redux_auth__["a" /* actions */].login());
+            return dispatch(__WEBPACK_IMPORTED_MODULE_2__redux_auth__["a" /* actions */].login());
         },
-        failed: function failed() {
-            return dispatch(__WEBPACK_IMPORTED_MODULE_2__redux_message__["a" /* actions */].failed());
+        failed: function failed(msg) {
+            return dispatch(__WEBPACK_IMPORTED_MODULE_3__redux_message__["a" /* actions */].failed(msg));
         },
-        loading: function loading() {
-            return dispatch(__WEBPACK_IMPORTED_MODULE_2__redux_message__["a" /* actions */].loading());
+        loading: function loading(msg) {
+            return dispatch(__WEBPACK_IMPORTED_MODULE_3__redux_message__["a" /* actions */].loading(msg));
         },
-        success: function success() {
-            return dispatch(__WEBPACK_IMPORTED_MODULE_2__redux_message__["a" /* actions */].success());
+        success: function success(msg) {
+            return dispatch(__WEBPACK_IMPORTED_MODULE_3__redux_message__["a" /* actions */].success(msg));
         },
         reset: function reset() {
-            return dispatch(__WEBPACK_IMPORTED_MODULE_2__redux_message__["a" /* actions */].reset());
+            return dispatch(__WEBPACK_IMPORTED_MODULE_3__redux_message__["a" /* actions */].reset());
         }
 
     };
@@ -61,8 +63,8 @@ var mapStateToProps = function mapStateToProps(_ref) {
     };
 };
 
-var Login = function (_React$Component) {
-    _inherits(Login, _React$Component);
+var Login = function (_Component) {
+    _inherits(Login, _Component);
 
     function Login(props) {
         _classCallCheck(this, Login);
@@ -96,13 +98,15 @@ var Login = function (_React$Component) {
             var self = this;
             self.props.loading("Checking credential please await");
 
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.post(__WEBPACK_IMPORTED_MODULE_5__global_url__["a" /* BASE_API */] + "user/login", data).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post(__WEBPACK_IMPORTED_MODULE_6__global_url__["a" /* BASE_API */] + "user/login", data).then(function (response) {
                 return response;
             }).then(function (result) {
+
                 if (result.data.success) {
                     var data = result.data.data;
                     console.log(result.data.msg);
                     localStorage.setItem('email', data.email);
+                    localStorage.setItem('displayName', data.DisplayName);
                     localStorage.setItem('id', data.userid);
                     localStorage.setItem('user_auth', data.user_auth);
                     localStorage.setItem('type', data.usertype);
@@ -114,7 +118,7 @@ var Login = function (_React$Component) {
                 }
             }).catch(function (error) {
 
-                console.log(error);
+                self.props.failed("Sorry but error occurred");
             });
         }
     }, {
@@ -128,87 +132,87 @@ var Login = function (_React$Component) {
         key: 'render',
         value: function render() {
             var isRedirect = this.state.redirect;
-            return React.createElement(
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'container' },
-                React.createElement(
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'row justify-content-center' },
-                    React.createElement(
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'col-md-8' },
-                        React.createElement(
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
                             { className: 'card' },
-                            React.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
                                 { className: 'card-header' },
                                 'Login'
                             ),
-                            React.createElement(
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
                                 { className: 'card-body' },
-                                React.createElement(
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'form',
                                     { method: 'POST', onSubmit: this.handleSubmit },
-                                    React.createElement(
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                         'div',
                                         { className: 'form-group row' },
-                                        React.createElement(
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                             'label',
                                             { htmlFor: 'email', className: 'col-sm-4 col-form-label text-md-right' },
                                             'E-Mail Address'
                                         ),
-                                        React.createElement(
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                             'div',
                                             { className: 'col-md-6' },
-                                            React.createElement('input', { id: 'email', type: 'email', onChange: this.handleChange, className: 'form-control', name: 'email', value: this.state.email })
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'email', type: 'email', onChange: this.handleChange, className: 'form-control', name: 'email', value: this.state.email })
                                         )
                                     ),
-                                    React.createElement(
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                         'div',
                                         { className: 'form-group row' },
-                                        React.createElement(
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                             'label',
                                             { htmlFor: 'password', className: 'col-md-4 col-form-label text-md-right' },
                                             'Password'
                                         ),
-                                        React.createElement(
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                             'div',
                                             { className: 'col-md-6' },
-                                            React.createElement('input', { id: 'password', onChange: this.handleChange, type: 'password', className: 'form-control', name: 'password', value: this.state.password })
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: 'password', onChange: this.handleChange, type: 'password', className: 'form-control', name: 'password', value: this.state.password })
                                         )
                                     ),
-                                    React.createElement(
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                         'div',
                                         { className: 'form-group row' },
-                                        React.createElement(
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                             'div',
                                             { className: 'col-md-6 offset-md-4' },
-                                            React.createElement(
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                                 'div',
                                                 { className: 'checkbox' },
-                                                React.createElement(
+                                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                                     'label',
                                                     null,
-                                                    React.createElement('input', { type: 'checkbox', name: 'remember' }),
+                                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'checkbox', name: 'remember' }),
                                                     ' Remember Me'
                                                 )
                                             )
                                         )
                                     ),
-                                    React.createElement(
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                         'div',
                                         { className: 'form-group row mb-0' },
-                                        React.createElement(
+                                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                             'div',
                                             { className: 'col-md-8 offset-md-4' },
-                                            React.createElement(
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                                 'button',
                                                 { type: 'submit', className: 'btn btn-primary', id: 'login-form button' },
                                                 'Login'
                                             ),
-                                            React.createElement(
+                                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                                 'a',
                                                 { className: 'btn btn-link', href: '#' },
                                                 'Forgot Your Password?'
@@ -220,72 +224,17 @@ var Login = function (_React$Component) {
                         )
                     )
                 ),
-                isRedirect && React.createElement(__WEBPACK_IMPORTED_MODULE_0_react_router__["a" /* Redirect */], { to: '/' })
+                isRedirect && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["a" /* Redirect */], { to: '/' })
             );
         }
     }]);
 
     return Login;
-}(React.Component);
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 //have to be both as both are compulsory
 
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(__WEBPACK_IMPORTED_MODULE_3_react_redux__["connect"])(mapStateToProps, mapDispatchToProps)(Login));
-
-/***/ }),
-
-/***/ 164:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export BASE_URL */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BASE_API; });
-var BASE_URL = "http://localhost:8000/";
-
-var BASE_API = BASE_URL + "api/";
-
-/***/ }),
-
-/***/ 185:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__ = __webpack_require__(54);
-/* unused harmony reexport MemoryRouter */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Prompt__ = __webpack_require__(55);
-/* unused harmony reexport Prompt */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Redirect__ = __webpack_require__(56);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__Redirect__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Route__ = __webpack_require__(27);
-/* unused harmony reexport Route */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(14);
-/* unused harmony reexport Router */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__StaticRouter__ = __webpack_require__(57);
-/* unused harmony reexport StaticRouter */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Switch__ = __webpack_require__(58);
-/* unused harmony reexport Switch */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__matchPath__ = __webpack_require__(15);
-/* unused harmony reexport matchPath */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__withRouter__ = __webpack_require__(59);
-/* unused harmony reexport withRouter */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* harmony default export */ __webpack_exports__["default"] = (Object(__WEBPACK_IMPORTED_MODULE_4_react_redux__["connect"])(mapStateToProps, mapDispatchToProps)(Login));
 
 /***/ })
 

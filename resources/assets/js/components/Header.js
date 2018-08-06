@@ -47,6 +47,9 @@
 										 { !this.props.isAuthenticated && <Link to ={`/Login`} className="nav-link" href="#">Login</Link>}
 									 </li>
 									 <li className="nav-item">
+										 { !this.props.isAuthenticated && <Link to ={`/Register`} className="nav-link" href="#">Register</Link>}
+									 </li>
+									 <li className="nav-item">
 										 { this.props.isAuthenticated && <Link to ={`/Employee`} className="nav-link" href="#">Employee</Link>}
 									 </li>
 									 <li className="nav-item">

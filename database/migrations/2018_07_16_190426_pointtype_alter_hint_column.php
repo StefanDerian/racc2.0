@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserUpdatedat extends Migration
+class PointtypeAlterHintColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddUserUpdatedat extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('user', function (Blueprint $table) {
-          $table->string('updated_at');
+        //altering hint column type to text
+        Schema::table('pointtype', function (Blueprint $table) {
+          $table->text('hint')->change();
         });
     }
 

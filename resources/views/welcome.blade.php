@@ -5,13 +5,37 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Laravel</title>
+        <title>RACC Intranet</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="{{mix('css/app.css')}}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table-all.min.css">
 
+
+
+        <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://printjs-4de6.kxcdn.com/print.min.css">
+
+
+
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+        <script
+          src="https://code.jquery.com/jquery-3.3.1.js"
+          integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+          crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script>
+        //additional javascript for functionality purposes
+        //enable bootstrap popover
+        $(document).ready(function(){
+          console.log("Tes")
+          $('[data-toggle="popover"]').popover({'trigger':'hover'})
+        });
+
+
+        </script>
         <!-- Styles -->
         <style>
             html, body {
@@ -80,6 +104,24 @@
 
 
             }
+            .fixed{
+              position: fixed;
+            }
+
+            /*for temporary only*/
+            .jumbotron{
+              background-color:#ffffff!important;
+            }
+            /*end for temporary only*/
+
+            /*for clients table*/
+            .react-bs-select-all{
+              display:none;
+            }
+            .filter{
+              display:none;
+            }
+            /*end for clients table*/
         </style>
     </head>
 <body>

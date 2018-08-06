@@ -10,6 +10,7 @@ export const types = {
 
 export const actions = {
 	failed: (msg) => {
+		console.log("redux test",msg)
 		return {type: types.FAILED,payload:{msg:msg,status:0}}
 	},
   loading: (msg) => {

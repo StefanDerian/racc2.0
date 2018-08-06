@@ -7,34 +7,23 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
 
-class Account extends Model implements JWTSubject
+class Account extends Model
 {
   /**
 * The table associated with the model.
 *
 * @var string
 */
-protected $table = 'account';
-protected $primaryKey = 'UserId';
-
-/**
-    * Get the identifier that will be stored in the subject claim of the JWT.
-    *
-    * @return mixed
-    */
-   public function getJWTIdentifier()
-   {
-       return $this->getKey();
-   }
-   /**
-    * Return a key value array, containing any custom claims to be added to the JWT.
-    *
-    * @return array
-    */
-   public function getJWTCustomClaims()
-   {
-       return [];
-   }
+   protected $table = 'account';
+   protected $primaryKey = 'UserID';
+   public $timestamps = false;
+    protected $guarded = [];
+  public function notes(){
+      return $this->hasMany('App\Note','writer');
+  }
+  public function notesWithClients(){
+      return $this->belongsToMany('App\Client','contact', 'writer', 'UserID');
+  }
 
 
 }

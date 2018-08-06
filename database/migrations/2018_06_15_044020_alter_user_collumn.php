@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddAccountTokenColumn extends Migration
+class AlterUserCollumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,12 @@ class AddAccountTokenColumn extends Migration
     public function up()
     {
         //
-        Schema::table('account', function (Blueprint $table) {
-          $table->string('auth_token');
+        Schema::table('user', function($table)
+        {
+          $table->date('duedate')->nullable()->change();
+          $table->date('Pexpiry')->nullable()->change();
+          $table->date('Vexpiry')->nullable()->change();
+          $table->date('lastContacted')->nullable()->change();
         });
     }
 

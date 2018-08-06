@@ -16,14 +16,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::any('{all?}', function () {
+    return view('welcome');
+}) ->where('all', '.+');
 //the route are made for handling refresh event
-Route::get('/Employee', function () {
-    return view('welcome');
-});
-Route::get('/Login', function () {
-    return view('welcome');
-});
+// Route::get('/Employee', function () {
+//     return view('welcome');
+// });
+// Route::get('/Login', function () {
+//     return view('welcome');
+// });
 //the end of the route made
 
 Auth::routes();

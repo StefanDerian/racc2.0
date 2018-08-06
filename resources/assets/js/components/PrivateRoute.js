@@ -14,12 +14,13 @@ const mapStateToProps = ({authReducer}) => {
 }
 
 
-
+//mostly were copied from a tutorial but need to modified to be adapted
+//I add the path as props for the Route component to make it identifyable when params are needed
 
 class PrivateRouteComponent extends React.Component {
     render() {
         return (
-            <Route render={props => (
+            <Route path = {this.props.path} render={props => (
                 this.props.isAuthenticated ? (
                     <this.props.component {...props}/>
                     ) : (
