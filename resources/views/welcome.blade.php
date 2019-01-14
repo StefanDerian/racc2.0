@@ -42,9 +42,15 @@
                 background-color: #fff;
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
-                font-weight: 100;
+                font-weight: 400;
                 height: 100vh;
                 margin: 0;
+            }
+
+
+
+            button, a{
+              margin:5px;
             }
 
             .full-height {
@@ -108,14 +114,13 @@
               position: fixed;
             }
 
-            /*for temporary only*/
-            .jumbotron{
-              background-color:#ffffff!important;
-            }
-            /*end for temporary only*/
+            
 
             /*for clients table*/
             .react-bs-select-all{
+              display:none;
+            }
+            .date-filter-comparator{
               display:none;
             }
             .filter{

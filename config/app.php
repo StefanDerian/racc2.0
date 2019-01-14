@@ -135,7 +135,7 @@ return [
         Illuminate\Filesystem\FilesystemServiceProvider::class,
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
-        Illuminate\Mail\MailServiceProvider::class,
+        //Illuminate\Mail\MailServiceProvider::class,
         Illuminate\Notifications\NotificationServiceProvider::class,
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
@@ -164,7 +164,8 @@ return [
         //Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         //Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
-
+        //additional library for sendgrid drivers
+        Sichikawa\LaravelSendgridDriver\MailServiceProvider::class
     ],
 
     /*

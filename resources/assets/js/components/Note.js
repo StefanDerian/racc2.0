@@ -129,6 +129,10 @@ class Note extends Component{
       }
       return true;
     }
+    const fullWidth = {
+       width: '100%',
+
+    };
     const self = this
     const cellEditProp = {
      mode: 'click',
@@ -145,9 +149,9 @@ class Note extends Component{
           {formApi => (
             <form onSubmit={formApi.submitForm}  >
               <div className = "row">
-                <div className = "form-group">
+                <div className = "form-group" style = {fullWidth} >
                   <label htmlFor="content"> Type your notes here:</label>
-                  <TextArea className = "form-control note-form" id = "content" field="Content" />
+                  <TextArea className = "form-control note-form" id = "content" field="Content" style={{height:'400px'}}/>
                 </div>
               </div>
               <button type="submit" className = "btn btn-primary" >Submit</button>

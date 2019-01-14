@@ -41,27 +41,21 @@ class EmailForm extends Component{
   **/
   handleSubmit(event){
     event.preventDefault()
+    console.log(localStorage.getItem("type"))
     var self = this
 
     var data = {
-      auth:{
-          email:"stefan.derian@gmail.com",
-          pass:this.state.password
-          },
       displayName:localStorage.getItem("displayName"),
       feedback:this.state.feedback,
       migrationData:this.state.migrationData,
       role:localStorage.getItem("type"),
-      to:{
-        email:"tploek@gmail.com",
-        name:"Stefan Derian"
+      sender:{
+        email:localStorage.getItem("email"),
+        name:localStorage.getItem("displayName")
       }
     }
 
-
-
-
-    axios.post(this.props.url,data).then(function(response){
+    axios.post(BASE_API+this.props.url,data).then(function(response){
       return response
     }).then(
       function(result){
@@ -102,7 +96,7 @@ class EmailForm extends Component{
               <textarea className="form-control" id="feedback" name="feedback" rows="3" onChange={this.handleChange} value = {this.state.content}></textarea>
 
             </div>
-            <button className="btn btn-primary btn-md" type = "submit">Send Email</button>
+            <button className="btn btn-primary btn-md" type = "submit" onClick={this.handleSubmit}>Send Email</button>
           </form>
         </div>
     )

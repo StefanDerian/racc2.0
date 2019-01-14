@@ -53,7 +53,7 @@ class Login extends Component {
     var self = this;
     self.props.loading("Checking credential please await")
 
-    axios.post(BASE_API+"user/login",data).then(
+    axios.post("/api/user/login",data).then(
       function(response){
         return response
       }).then(
@@ -61,15 +61,23 @@ class Login extends Component {
 
           if(result.data.success){
             var data = result.data.data
-            console.log(result.data.msg)
+            console.log(data)
             localStorage.setItem('email', data.email);
-            localStorage.setItem('displayName', data.DisplayName);
+            localStorage.setItem('displayName', data.displayname);
             localStorage.setItem('id', data.userid);
             localStorage.setItem('user_auth', data.user_auth);
             localStorage.setItem('type', data.usertype);
             self.props.login();
             self.props.success(result.data.msg)
-            self.setState({ redirect: true })
+            //self.setState({ redirect: true })
+
+            if(data.usertype == "ACCOUNTANT"){
+              window.location = "/Accountant"
+            }else{
+              window.location = "/"
+            }
+
+
           }else{
             self.props.failed(result.data.msg)
           }

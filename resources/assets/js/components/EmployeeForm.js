@@ -25,6 +25,7 @@ const mapStateToProps = ({authReducer,messageReducer,selectReducer,employeeReduc
 		isAuthenticated:authReducer.isLoggedIn,
     serviceSelectForm:selectReducer.serviceForm,
     employeeSelectForm:employeeReducer.selectForm2,
+    employeeRole:employeeReducer.selectRole,
     statusSelectForm:selectReducer.statusForm2,
 	}
 }
@@ -119,107 +120,117 @@ class EmployeeForm extends Component{
     return (
       <div>
         <div className = "container-fluid">
-        <h1>Employee Management</h1>
-        <Form ref = "clientForm" onSubmitFailure = {( errors, onSubmitError, formApi ) => {this.toggleModal()}} getApi = {(formApi) => {this.formApi(formApi)}} onSubmit = {(values, e, formApi) => {this.handleSubmit(values,formApi)}}>
-          {formApi => (
-              <form onSubmit={formApi.submitForm}  >
+        <div className = "jumbotron">
+          <h1>Employee Management</h1>
+          <Form ref = "clientForm" onSubmitFailure = {( errors, onSubmitError, formApi ) => {this.toggleModal()}} getApi = {(formApi) => {this.formApi(formApi)}} onSubmit = {(values, e, formApi) => {this.handleSubmit(values,formApi)}}>
+            {formApi => (
+                <form onSubmit={formApi.submitForm}  >
 
 
-                  {/*Display Name*/}
-                  <div className = "container">
-                    <div className = "row">
-                      <div className = "form-group"  >
-                        <label htmlFor="DisplayName"> Display Name:</label>
-
-                        <AlphaText type="string" id="DisplayName" className="form-control search-form" field="DisplayName"/>
-
-                      </div>
-                    </div>
-                    {/*end Display Name*/}
-
-                    {/*UserName*/}
-                    <div className = "row">
-                      <div className = "form-group"  >
-                        <label htmlFor="UserName"> Username:</label>
-
-                          <AlphaText type="string" id="UserName" className="form-control search-form" field="UserName"/>
-
-                      </div>
-                    </div>
-                    {/*end UserName*/}
-
-                    {/*language*/}
-                    <div className = "row">
-                      <div className = "form-group"  >
-                        <label htmlFor="language"> language:</label>
-
-                          <AlphaText type="string" id="language" className="form-control search-form" field="language"/>
-
-                      </div>
-                    </div>
-                    {/*end language*/}
-
-                    {/*Email*/}
-                    <div className = "row">
-                      <div className = "form-group"  >
-                        <label htmlFor="Email"> Email:</label>
-
-                        <RequiredText type="email" id="Email" className="form-control search-form" field="email"/>
-
-                      </div>
-                    </div>
-                    {/*end Email*/}
-                    {/*password checkbox*/}
-                    {this.props.id &&
-
-                      <div className = "row">
-                        <div className="form-check">
-                          <input className="form-check-input" type="checkbox" name = "editPassword" value={this.state.editPassword} id="editPassword" onChange ={this.handleCheckboxChange} />
-                          <label className="form-check-label" htmlFor="editPassword">
-                            Change Password
-                          </label>
-                        </div>
-
-                      </div>
-
-                    }
-                    {/*end password checkbox*/}
-                    {/*if the id is not present means that the password must be created
-                      but if present then the password can be updated or not */}
-                    {(!this.props.id || this.state.editPassword) &&
+                    {/*Display Name*/}
+                    <div className = "container">
                       <div className = "row">
                         <div className = "form-group"  >
-                          <label htmlFor="Password2"> Password:</label>
+                          <label htmlFor="DisplayName"> Display Name:</label>
 
-                          <RequiredText type="Password" id="Password2" className="form-control search-form" field="Password2"/>
+                          <AlphaText type="string" id="DisplayName" className="form-control search-form" field="DisplayName"/>
 
                         </div>
                       </div>
+                      {/*end Display Name*/}
+
+                      {/*UserName*/}
+                      <div className = "row">
+                        <div className = "form-group"  >
+                          <label htmlFor="UserName"> Username:</label>
+
+                            <AlphaText type="string" id="UserName" className="form-control search-form" field="UserName"/>
+
+                        </div>
+                      </div>
+                      {/*end UserName*/}
+
+                      {/*language*/}
+                      <div className = "row">
+                        <div className = "form-group"  >
+                          <label htmlFor="language"> language:</label>
+
+                            <AlphaText type="string" id="language" className="form-control search-form" field="language"/>
+
+                        </div>
+                      </div>
+                      {/*end language*/}
+
+                      {/*Email*/}
+                      <div className = "row">
+                        <div className = "form-group"  >
+                          <label htmlFor="Email"> Email:</label>
+
+                          <RequiredText type="email" id="Email" className="form-control search-form" field="email"/>
+
+                        </div>
+                      </div>
+                      {/*end Email*/}
+                      {/*Role*/}
+                      <div className = "row">
+                        <div className = "form-group">
+                          <label htmlFor = "UserType">Role  :</label>
+                          <Select field ="UserType"id="UserType" options={this.props.employeeRole} className = "form-control search-form"/>
+                        </div>
+                      </div>
+                      {/*end Role*/}
+                      {/*password checkbox*/}
+                      {this.props.id &&
+
+                        <div className = "row">
+                          <div className="form-check">
+                            <input className="form-check-input" type="checkbox" name = "editPassword" value={this.state.editPassword} id="editPassword" onChange ={this.handleCheckboxChange} />
+                            <label className="form-check-label" htmlFor="editPassword">
+                              Change Password
+                            </label>
+                          </div>
+
+                        </div>
+
                       }
+                      {/*end password checkbox*/}
+                      {/*if the id is not present means that the password must be created
+                        but if present then the password can be updated or not */}
                       {(!this.props.id || this.state.editPassword) &&
-                      <div className = "row">
-                        <div className = "form-group"  >
-                          <label htmlFor="RepeatPassword">Repeat Password:</label>
+                        <div className = "row">
+                          <div className = "form-group"  >
+                            <label htmlFor="Password2"> Password:</label>
 
-                          <RequiredText type="Password" id="RepeatPassword" className="form-control search-form" field="RepeatPassword"/>
+                            <RequiredText type="Password" id="Password2" className="form-control search-form" field="Password2"/>
 
+                          </div>
                         </div>
-                      </div>
+                        }
+                        {(!this.props.id || this.state.editPassword) &&
+                        <div className = "row">
+                          <div className = "form-group"  >
+                            <label htmlFor="RepeatPassword">Repeat Password:</label>
 
-                    }
-                  <div className = "row">
-                    {/*in case the button need to show modal it get onclick event*/}
-                    <button type="submit" className="btn btn-primary">
-                      {this.props.id && "Update"}
-                      {!this.props.id && "Create"}
+                            <RequiredText type="Password" id="RepeatPassword" className="form-control search-form" field="RepeatPassword"/>
 
-                    </button>
+                          </div>
+                        </div>
+
+                      }
+                    <div className = "row">
+                      {/*in case the button need to show modal it get onclick event*/}
+                      <button type="submit" className="btn btn-primary">
+                        {this.props.id && "Update"}
+                        {!this.props.id && "Create"}
+
+                      </button>
+                    </div>
                   </div>
-                </div>
-                </form>
-            )}
+                  </form>
+              )}
 
-          </Form>
+            </Form>
+          </div>
         </div>
       </div>
 

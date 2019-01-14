@@ -264,7 +264,7 @@ class Pte extends Component{
           </td>
           <td>{this.state.ptedata[key].formname}</td>
           <td><Text type="number" id = {this.state.ptedata[key].formname + " current"} className="form-control pte-form" field = "current"/></td>
-          <td>{(this.state.ptedata[key].note)}</td>
+          <td dangerouslySetInnerHTML={{ __html: this.state.ptedata[key].note }} />
           <td><Text type="number" id = {this.state.ptedata[key].formname + " goal"} className="form-control pte-form" field = "goal" /></td>
         </NestedField>
       </tr>
@@ -327,7 +327,7 @@ class Pte extends Component{
             )
           }
         </Form>
-        <EmailForm id = {this.props.id} migrationData={this.state.pteData} url = {"http://localhost:3002/api/email/migration"}></EmailForm>
+        <EmailForm id = {this.props.id} migrationData={this.state.pteData} url ={"sendmigrationemail/"+this.props.id} ></EmailForm>
       </div>
     )
   }

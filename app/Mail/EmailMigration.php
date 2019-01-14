@@ -16,17 +16,14 @@ class EmailMigration extends Mailable
      *
      * @return void
      */
-    public $from;
+
     public $content;
-    public $to;
+
     public $migration_data;
 
 
-    public function __construct($from,$content,$to,$migration_data)
+    public function __construct($content,$migration_data)
     {
-        //
-        $this->from = $from;
-        $this->to = $to;
         $this->content = $content;
         $this->migration_data = $migration_data;
     }
@@ -39,8 +36,6 @@ class EmailMigration extends Mailable
     public function build()
     {
         return $this->view('email.migration')->with([
-          'from'=>$this->from,
-          'to' => $this->to,
           'content' => $this->content,
           'migration_data'=> $this->migration_data
         ]);

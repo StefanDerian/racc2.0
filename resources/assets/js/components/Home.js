@@ -62,6 +62,9 @@
           tim:["",""],// last contact date
           CurrentStatus:"",
           UserID:"",//the employee user id
+          Nationality:"",
+          Course:"",
+          Visa:""
         }
         //end of form data
       }
@@ -125,7 +128,7 @@
 
     render () {
       const options = {
-        exportCSVText: 'Custom Export CSV Text',
+        exportCSVText: 'Export CSV',
         printToolBar: true
       };
 
@@ -167,12 +170,64 @@
         clickToExpand: true,// expand the detail of the data
         showOnlySelected: true //display urgent client only
       };
+      const expandColumnComponent = ({ isExpandableRow, isExpanded }) => {
+          let content = '';
+
+          if (isExpandableRow) {
+            content = (isExpanded ? '(-)' : '(+)' );
+          } else {
+            content = ' ';
+          }
+          return (
+            <div> <button className = "btn btn-danger btn-sm">{ content } </button></div>
+          );
+      }
       const expandComponent = (row)=>{
+
         return (
           <div>
-              <Link to ={{pathname:"Detail/"+row.clientId+"/updateclient"}} className="btn btn-primary">Update Client Data</Link>
-              <Link to ={{pathname:"Detail/"+row.clientId+"/pte"}} className="btn btn-primary">Update Migration data</Link>
-              <Link to ={{pathname:"Detail/"+row.clientId+"/education"}} className="btn btn-primary">Update Education Data</Link>
+              <div className = "row">
+                <Link to ={{pathname:"Detail/"+row.clientId+"/updateclient"}} className="btn btn-primary">Update Client Data</Link>
+                <Link to ={{pathname:"Detail/"+row.clientId+"/pte"}} className="btn btn-primary">Update Migration data</Link>
+                <Link to ={{pathname:"Detail/"+row.clientId+"/education"}} className="btn btn-primary">Update Education Data</Link>
+              </div>
+              <div className = "row">
+                <dl>
+                  <dt>First Name</dt>
+                  <dd>{row.FirstName}</dd>
+                  <dt>Last Name</dt>
+                  <dd>{row.LastName}</dd>
+                  <dt>Mobile Number</dt>
+                  <dd>{row.Mobile}</dd>
+                  <dt>Date of Birth</dt>
+                  <dd>{row.DateofBirth}</dd>
+                  <dt>Email</dt>
+                  <dd>{row.Email}</dd>
+                  <dt>Nationality</dt>
+                  <dd>{row.Nationality}</dd>
+                  <dt>Client Status</dt>
+                  <dd>{row.CurrentStatus}</dd>
+                  <dt>Visa Expiry Date</dt>
+                  <dd>{row.Vexpiry}</dd>
+                  <dt>Visa Type</dt>
+                  <dd>{row.Visa}</dd>
+                  <dt>Course</dt>
+                  <dd>{row.Course}</dd>
+                  <dt>Last Contact Date</dt>
+                  <dd>{row.tim}</dd>
+                  <dt>Expected Graduation Date</dt>
+                  <dd>{row.uni_compl}</dd>
+                  <dt>Due Date</dt>
+                  <dd>{row.duedate}</dd>
+
+
+                </dl>
+
+              </div>
+
+
+
+
           {/*detailed expanded data*/}
           </div>
         );
@@ -192,210 +247,243 @@
 
       return(
         <div>
-          {/* <button type="reset" className="btn btn-warning" onClick={()=>{
+          <div className = "container">
+            {/* <button type="reset" className="btn btn-warning" onClick={()=>{
 
-              this.setState({sidebarOpen:true})
-            }
-          }>
-            Filter
-          </button> */ }
-          <button type="button" className="btn btn-warning" onClick={()=>{
+                this.setState({sidebarOpen:true})
+              }
+            }>
+              Filter
+            </button> */ }
 
-              this.print()
-            }
-          }>
-            Print
-          </button>
-          <Link to ={{pathname:"/CreateClient"}} className="btn btn-primary pull-right">Create Client</Link>
-          {/* <ReactToPrint
-            trigger={() => <a className="btn btn-primary" href="#">Print</a>}
-            content={() => (<table>
-                  <thead>
-                    <tr>
-                      <td>
-                        First Name
-                      </td>
-                      <td>
-                        Last Name
-                      </td>
-                    </tr>
-                    {
-                      this.state.tempClients.map((values) =>
-                        <tr>
-                          <td>
-                            {values.FirstName}
-                          </td>
-                          <td>
-                            {values.LastName}
-                          </td>
-                        </tr>
-                      )
-                    }
+            {/* <ReactToPrint
+              trigger={() => <a className="btn btn-primary" href="#">Print</a>}
+              content={() => (<table>
+                    <thead>
+                      <tr>
+                        <td>
+                          First Name
+                        </td>
+                        <td>
+                          Last Name
+                        </td>
+                      </tr>
+                      {
+                        this.state.tempClients.map((values) =>
+                          <tr>
+                            <td>
+                              {values.FirstName}
+                            </td>
+                            <td>
+                              {values.LastName}
+                            </td>
+                          </tr>
+                        )
+                      }
 
-                  </thead>
-                </table>)}
-          /> */}
+                    </thead>
+                  </table>)}
+            /> */}
 
-          {/*<Drawer open={this.state.sidebarOpen} onChange = {open => this.setState({ sidebarOpen:open})} drawerStyle = {{background:"#F9F9F9",boxShadow:"rgba(0, 0, 0, 0.188235) 0px 10px 20px, rgba(0, 0, 0, 0.227451) 0px 6px 6px"}}>*/}
+            {/*<Drawer open={this.state.sidebarOpen} onChange = {open => this.setState({ sidebarOpen:open})} drawerStyle = {{background:"#F9F9F9",boxShadow:"rgba(0, 0, 0, 0.188235) 0px 10px 20px, rgba(0, 0, 0, 0.227451) 0px 6px 6px"}}>*/}
 
-            <Form onChange = {(values)=> {
-                //the data of the changed values
-                var data=values.values;
-                //current state of the form data
-                var currentdata=this.state.formdata;
-                //copying the current state with the new state given
-                this.setState({formdata:{...currentdata,...data}})
+              <Form onChange = {(values)=> {
+                  //the data of the changed values
+                  var data=values.values;
+                  //current state of the form data
+                  var currentdata=this.state.formdata;
+                  //copying the current state with the new state given
+                  this.setState({formdata:{...currentdata,...data}})
 
-                this.filterClient(data)
+                  this.filterClient(data)
 
 
-                }
+                  }
 
 
-              }>
-              {formApi => (
+                }>
+                {formApi => (
 
-                  <form onSubmit={formApi.submitForm}>
-                    <div className = "row">
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="FirstName"> First Name:</label>
+                    <form onSubmit={formApi.submitForm}>
+                      <div className = "row">
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="FirstName"> First Name:</label>
 
-                          <Text type="string" id="FirstName" className="form-control search-form" field="FirstName" placeholder="Search by First Name..."/>
+                            <Text type="string" id="FirstName" className="form-control search-form" field="FirstName" placeholder="Search by First Name..."/>
 
-                        </div>
-                      </div>
-
-
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group">
-                          <label htmlFor="LastName"> Last Name:</label>
-
-                          <Text type="string" id="LastName" className="form-control search-form" field="LastName" placeholder="Search by Last Name..."/>
-
-                        </div>
-
-                      </div>
-
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group">
-                          <label htmlFor="DateofBirth" > Date Of Birth:</label>
-                          <Text type="date" id="DateofBirth" className="form-control search-form" field="DateofBirth" placeholder="dd/mm/yyyy"/>
-                        </div>
-
-                      </div>
-
-                      <div className = "col search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="Mobile"> phone number:</label>
-                          <Text type="string" id="Mobile" className="form-control search-form" field="Mobile" placeholder="Search by Phone Number..."/>
-                        </div>
-                      </div>
-
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="Vexpiry"> Visa Expiry Date bottom Range:</label>
-                          <Text type="date" id="Vexpiry" className="form-control search-form" field="Vexpiry[0]" placeholder="dd/mm/yyyy"/>
-                        </div>
-                      </div>
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="Vexpiry"> Visa Expiry Date upper Range:</label>
-                          <Text type="date" id="Vexpiry" className="form-control search-form" field="Vexpiry[1]" placeholder="dd/mm/yyyy"/>
-                        </div>
-                      </div>
-
-
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="tim"> last contact bottom Range:</label>
-                          <Text type="date" id="tim" className="form-control search-form" field="tim[0]" placeholder="dd/mm/yyyy"/>
-                        </div>
-                      </div>
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="tim"> last contact upper range:</label>
-                          <Text type="date" id="tim" className="form-control search-form" field="tim[1]" placeholder="dd/mm/yyyy"/>
-                        </div>
-                      </div>
-
-
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="tim"> graduation date bottom Range:</label>
-                          <Text type="date" id="uni_Compl" className="form-control search-form" field="uni_Compl[0]" placeholder="dd/mm/yyyy"/>
-                        </div>
-                      </div>
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group"  >
-                          <label htmlFor="tim"> graduation date upper range:</label>
-                          <Text type="date" id="uni_Compl" className="form-control search-form" field="uni_Compl[1]" placeholder="dd/mm/yyyy"/>
-                        </div>
-                      </div>
-
-                      <div className = "col-md-3 search-col">
-                        <div className = "form-group">
-                          <label htmlFor = "CurrentStatus">Status  :</label>
-                          <Select field ="CurrentStatus"id="CurrentStatus" options={this.props.statusSelectForm} field="CurrentStatus" className = "form-control search-form"/>
                           </div>
                         </div>
 
-                      <div className = "col-md-3 search-col">
-                        { localStorage.getItem("type") == "MANAGER" &&
 
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group">
+                            <label htmlFor="LastName"> Last Name:</label>
 
+                            <Text type="string" id="LastName" className="form-control search-form" field="LastName" placeholder="Search by Last Name..."/>
+
+                          </div>
+
+                        </div>
+
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group">
+                            <label htmlFor="DateofBirth" > Date Of Birth:</label>
+                            <Text type="date" id="DateofBirth" className="form-control search-form" field="DateofBirth" placeholder="dd/mm/yyyy"/>
+                          </div>
+
+                        </div>
+
+                        <div className = "col search-col">
                           <div className = "form-group"  >
-                            <label htmlFor = "UserID">Consultant:</label>
-                            <Select field="UserID" id="UserID" options={this.props.employeeSelectForm}  className = "form-control search-form"/>
+                            <label htmlFor="Mobile"> phone number:</label>
+                            <Text type="string" id="Mobile" className="form-control search-form" field="Mobile" placeholder="Search by Phone Number..."/>
+                          </div>
+                        </div>
+
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="Vexpiry"> Visa Expiry Date bottom Range:</label>
+                            <Text type="date" id="Vexpiry" className="form-control search-form" field="Vexpiry[0]" placeholder="dd/mm/yyyy"/>
+                          </div>
+                        </div>
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="Vexpiry"> Visa Expiry Date upper Range:</label>
+                            <Text type="date" id="Vexpiry" className="form-control search-form" field="Vexpiry[1]" placeholder="dd/mm/yyyy"/>
+                          </div>
+                        </div>
+
+
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="tim"> last contact bottom Range:</label>
+                            <Text type="date" id="tim" className="form-control search-form" field="tim[0]" placeholder="dd/mm/yyyy"/>
+                          </div>
+                        </div>
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="tim"> last contact upper range:</label>
+                            <Text type="date" id="tim" className="form-control search-form" field="tim[1]" placeholder="dd/mm/yyyy"/>
+                          </div>
+                        </div>
+
+
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="tim"> graduation date bottom Range:</label>
+                            <Text type="date" id="uni_Compl" className="form-control search-form" field="uni_Compl[0]" placeholder="dd/mm/yyyy"/>
+                          </div>
+                        </div>
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="tim"> graduation date upper range:</label>
+                            <Text type="date" id="uni_Compl" className="form-control search-form" field="uni_Compl[1]" placeholder="dd/mm/yyyy"/>
+                          </div>
+                        </div>
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="Nationality"> Nationality:</label>
+                            <Text type="string" id="Nationality" className="form-control search-form" field="Nationality"/>
+                          </div>
+                        </div>
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="Course"> Course:</label>
+                            <Text type="string" id="Course" className="form-control search-form" field="Course"/>
+                          </div>
+                        </div>
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group"  >
+                            <label htmlFor="Visa"> Visa Type:</label>
+                            <Text type="string" id="Visa" className="form-control search-form" field="Visa"/>
+                          </div>
+                        </div>
+
+                        <div className = "col-md-3 search-col">
+                          <div className = "form-group">
+                            <label htmlFor = "CurrentStatus">Status  :</label>
+                            <Select field ="CurrentStatus"id="CurrentStatus" options={this.props.statusSelectForm} field="CurrentStatus" className = "form-control search-form"/>
                             </div>
+                          </div>
+
+                        <div className = "col-md-3 search-col">
+                          { localStorage.getItem("type") == "MANAGER" &&
+
+
+                            <div className = "form-group"  >
+                              <label htmlFor = "UserID">Consultant:</label>
+                              <Select field="UserID" id="UserID" options={this.props.employeeSelectForm}  className = "form-control search-form"/>
+                              </div>
+
+                            }
+                          </div>
+                      </div>
+
+
+                        {/* restoring data via checkpoint*/}
+                        <button type="reset" className="btn btn-warning btn-lg" onClick={()=>{
+                            formApi.resetAll()
+                            this.setState({formdata:this.state.defaultFormData})
+                            this.setState({tempClients:this.state.clients})
 
                           }
-                        </div>
-                    </div>
+                        }>
+                          Reset
+                        </button>
 
 
-                      {/* restoring data via checkpoint*/}
-                      <button type="reset" className="btn btn-warning" onClick={()=>{
-                          formApi.resetAll()
-                          this.setState({formdata:this.state.defaultFormData})
-                          this.setState({tempClients:this.state.clients})
-
-                        }
-                      }>
-                        Reset
-                      </button>
                       </form>
 
-                  )}
-                </Form>
-        { /* </Drawer>*/}
+
+                    )}
+                  </Form>
+                  <Link to ={{pathname:"/CreateClient"}} className="btn btn-primary btn-lg pull-right">Create Client</Link>
+                  <button type="button" className="btn btn-warning btn-lg" onClick={()=>{
+
+                    this.print()
+                      }
+                  }>
+                    Print
+                  </button>
+          { /* </Drawer>*/}
 
 
-          {/*every column must have filter attribute and ref if they want to be filtered*/}
+            {/*every column must have filter attribute and ref if they want to be filtered*/}
 
 
 
-              <BootstrapTable ref = "clientsTable" data={this.state.tempClients}
-                options={options}
-                selectRow={ selectRow }
-                expandableRow={(row) => true}
-                expandComponent={ expandComponent }
-                exportCSV striped hover pagination>
-                <TableHeaderColumn isKey dataField='clientId' dataSort={ true }>Client ID</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'TextFilter', delay: 1000 } } ref = 'FirstName' dataField='FirstName' dataSort={ true }>First Name</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'TextFilter', delay: 1000 } } ref = 'LastName' dataField='LastName' dataSort={ true }>LastName</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'TextFilter', delay: 1000 } } ref = 'Mobile' dataField='Mobile' dataSort={ true }>Mobile Number</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'TextFilter' } } ref = 'DateofBirth' dataField='DateofBirth' dataSort={ true }>DOB</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'TextFilter', delay: 1000 } } ref = 'Email' dataField='Email' dataSort={ true }>Email</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'SelectFilter',options:this.props.statusSelect, delay: 3000 } } ref = 'CurrentStatus' dataField='CurrentStatus' dataSort={ true }>Status</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'DateFilter' } } ref = 'Vexpiry' dataField='Vexpiry'dataSort={ true }>Visa Expiry Date</TableHeaderColumn>
-                <TableHeaderColumn dataField='Course' dataSort={ true }>Course</TableHeaderColumn>
-                <TableHeaderColumn filter={ { type: 'DateFilter' } } ref = 'tim' dataField='tim' dataSort={ true }>Last Contact Date</TableHeaderColumn>
-                <TableHeaderColumn ref = 'UserID' filter={ { type: 'SelectFilter',options:this.props.employeesSelect, delay: 3000  } } dataField='UserID' dataSort={ true } dataFormat={ enumFormatter } formatExtraData={ this.props.employeesSelect } hidden = { localStorage.getItem("type") != "MANAGER"}>Consultant</TableHeaderColumn>
-                <TableHeaderColumn ref = 'uni_Compl' filter={ { type: 'DateFilter' } } dataField='uni_Compl' dataSort={ true }>Expected Graduation Date</TableHeaderColumn>
-                <TableHeaderColumn dataField='duedate'dataSort={ true }>Due Date</TableHeaderColumn>
-              </BootstrapTable>
+                <BootstrapTable ref = "clientsTable" data={this.state.tempClients}
 
+                  style={{ width: "50%" }}
+                  options={options}
+                  selectRow={ selectRow }
+                  expandableRow={(row) => true}
+                  expandComponent={ expandComponent }
+                  expandColumnOptions={ {
+                     expandColumnVisible: true,
+                     expandColumnComponent: expandColumnComponent,
+                     columnWidth: 50
+                   }}
+                  autoCollapse={ true }
+                  exportCSV striped hover pagination>
+                  <TableHeaderColumn isKey dataField='clientId' dataSort={ true }  hidden>Client ID</TableHeaderColumn>
+                  <TableHeaderColumn width="150px"  filter={ { type: 'TextFilter', delay: 1000 } } ref = 'FirstName' dataField='FirstName' dataSort={ true } columnTitle>First Name</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'TextFilter', delay: 1000 } } ref = 'LastName' dataField='LastName' dataSort={ true } columnTitle>LastName</TableHeaderColumn>
+                  <TableHeaderColumn width="150px"  filter={ { type: 'TextFilter', delay: 1000 } } ref = 'Mobile' dataField='Mobile' dataSort={ true } columnTitle>Mobile Number</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'TextFilter' } } ref = 'DateofBirth' dataField='DateofBirth' dataSort={ true } columnTitle>DOB</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'TextFilter', delay: 1000 } } ref = 'Email' dataField='Email' dataSort={ true } columnTitle>Email</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'TextFilter', delay: 1000 } } ref = 'Nationality' dataField='Nationality' dataSort={ true } columnTitle>Nationality</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'SelectFilter',options:this.props.statusSelect, delay: 3000 } } ref = 'CurrentStatus' dataField='CurrentStatus' dataSort={ true } columnTitle>Status</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'DateFilter' } } ref = 'Vexpiry' dataField='Vexpiry'dataSort={ true } columnTitle>Visa Expiry Date</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'TextFilter', delay: 1000 } } dataField='Course' ref='Course' dataSort={ true } columnTitle>Course</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'TextFilter', delay: 1000 } } dataField='Visa' ref='Visa' dataSort={ true } columnTitle>Visa</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" filter={ { type: 'DateFilter' } } ref = 'tim' dataField='tim' dataSort={ true } columnTitle>Last Contact Date</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" ref = 'UserID' filter={ { type: 'SelectFilter',options:this.props.employeesSelect, delay: 3000  } } dataField='UserID' dataSort={ true } dataFormat={ enumFormatter } formatExtraData={ this.props.employeesSelect } hidden = { localStorage.getItem("type") != "MANAGER"} columnTitle>Consultant</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" ref = 'uni_Compl' filter={ { type: 'DateFilter' } } dataField='uni_Compl' dataSort={ true }>Expected Graduation Date</TableHeaderColumn>
+                  <TableHeaderColumn width="150px" dataField='duedate'dataSort={ true } columnTitle>Due Date</TableHeaderColumn>
+                </BootstrapTable>
+              </div>
             </div>
           );
 
@@ -450,10 +538,18 @@
 
                 }else{
                   if (value !== "" && value !== 0 && value !== -1 && value){
-                    console.log("value",value)
+                    //console.log("value",value)
                     //this.refs[key].applyFilter(value)
                     filteredData = filteredData.filter(function(values){
-                        return values[key] == value
+                      //3. string.search
+                      var string1 = values[key];
+                      var expr = value;
+                      if(string1.indexOf(expr) !== -1){
+                        console.log("values",values[key])
+                        console.log("value",value)
+                      }
+                      console.log(string1.indexOf(expr) !== -1)
+                      return string1.indexOf(expr) !== -1
                     })
                   }else{
                     //this.refs[key].cleanFiltered()
@@ -472,8 +568,9 @@
         }
         componentWillMount(){
           var self = this;
-          var url = BASE_API+"clientdata"
+          var url = "/api/clientdata"
           // to determine which is for agent and manager
+          console.log(localStorage.getItem("type"))
           if(localStorage.getItem("type") != "MANAGER"){
             url += "/"+ localStorage.getItem("id")
           }else{
@@ -486,9 +583,9 @@
             //set the state for client data
 
             console.log(response)
-            if(response.data.data){
-              self.props.failed("you still do not have any clients")
-            }
+            // if(response.data.data){
+            //   self.props.failed("you still do not have any clients")
+            // }
             self.setState({clients:response.data.data})
 
             //set the state for temporary client data which is used for filtering

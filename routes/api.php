@@ -7,6 +7,14 @@ use App\Client;
 use App\Note;
 
 use App\Mail\EmailMigration;
+
+use \SendGrid\Mail\From as From;
+use \SendGrid\Mail\To as To;
+use \SendGrid\Mail\Subject as Subject;
+use \SendGrid\Mail\PlainTextContent as PlainTextContent;
+use \SendGrid\Mail\HtmlContent as HtmlContent;
+use \SendGrid\Mail\Mail as SendgridMail;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -73,6 +81,19 @@ Route::put('/updateclient/{id}', function($id,Request $data){
     }else{
       $response = ['success'=>false,'msg' =>'Failed updating client data', 'data'=>$data];
     }
+    return response()->json($response, 201);
+});
+//looking for spesific client data
+Route::post('/clientCustomData', function(Request $request){
+
+    $clients = DB::table('user')->where($request->all());
+    $response = [];
+    if($clients = $clients->get()){
+      $response= ['success'=>true, 'data'=>$clients];
+    }else{
+      $response= ['success'=>false];
+    }
+
     return response()->json($response, 201);
 });
 //looking for spesific client data
@@ -244,7 +265,6 @@ Route::get('/migration/{clientid}', function($clientid){
     }
     return response()->json($response, 201);
 });
-
 //get education data of one client
 Route::get('/education/{clientid}', function($clientid){
   $education = DB::table('education')->where("UserID",$clientid);
@@ -277,6 +297,16 @@ Route::put('/educationupdate/{id}', function($id,Request $request){
     }
     return response()->json($response, 201);
 });
+//get The education Payments based on Id, 1 university application can have more than 1 payments depends on the plan is it weekly or monthly
+Route::get('/educationPayment/{eduId}', 'EducationPaymentController@show');
+//create new education payment data
+Route::post('/educationPaymentInsert','EducationPaymentController@store');
+//update education payment data
+Route::put('/educationPaymentUpdate/{id}','EducationPaymentController@update');
+
+
+
+
 //create new pte data
 Route::post('/migrationinsert',function(Request $request){
   $response = [];
@@ -323,32 +353,72 @@ Route::put('/migrationupdate/{clientid}',function($clientid,Request $request){
 //route used for sending an email for migration purposes
 Route::post('/sendmigrationemail/{clientid}',function($clientid,Request $request){
   $client = App\Client::find($clientid);
+  //print_r($client);
   //calculating the pte scores data for handling the new pointtype data which has not been added
   $ptedata = DB::select("SELECT * FROM pointtype LEFT JOIN clientpoint ON pointtype.id = clientpoint.pointid AND clientpoint.clientid =".$clientid);
-
-
-  $data = [
-            "from"=>[
-                'address' => $request["sender"]["email"],
-                'name' =>$client->Email,
-            ],
-            "to"=>$client->Email
-
-          ];
-  if(
-        Mail::send(new EmailMigration($request->sender,$request->content,$client,$ptedata),$data,
-        function($message) use ($data){
-
-          $message->to( $data['to'],"Stefan Derian" );
-          $message->from( $data['from'] );
-          $message->subject( 'Your Point Test Update and feedback' );
-        }
+  $fullname = $client["FirstName"]." ".$client["LastName"];
+  $from = new From($request["sender"]["email"], $request["sender"]["name"]);
+  $tos = [
+      new To(
+          $client["Email"],
+          $fullname,
+          [
+              '-client-' => $fullname,
+              '-feedback-' => $request["feedback"],
+              '-DisplayName-' => $request["sender"]["name"]
+          ]
       )
-    ){
+  ];
+  $pte_html = "";
+  //$subject = new Subject("I'm replacing the subject tag");
+  $pte_html .= '<table class ="table" width="100%" style="border-collapse:collapse" cellpadding="13">';
+
+        $pte_html .= '<tr class = "info">
+        <th></th>
+        <th>Skills</th>
+        <th>Current Points</th>
+        <th>Notes</th>
+        <th>Goal Points</th>
+        </tr>';
+        foreach ($ptedata as $key => $value) {
+          $pte_html .= '<tr>';
+          $pte_html .= "<td>".$value->id ."</td>";
+          $pte_html .= "<td>".$value->name ."</td>";
+          $pte_html .= "<td>".$value->current."</td>";
+          $pte_html .= "<td>".$value->note."</td>";
+          $pte_html .= '<td>';
+          $pte_html .=  $value->goal;
+          $pte_html .= '</td>';
+          $pte_html .= '</tr>';
+
+
+        }
+        $pte_html .= '</table>';
+    $subject = new Subject("Your Migration Points Update and Feedback");
+    $plainTextContent = new PlainTextContent(
+        "I'm replacing the **body tag**"
+    );
+    $htmlContent = new HtmlContent(
+        $pte_html
+    );
+
+    $email = new SendgridMail(
+        $from,
+        $tos,
+        $subject,
+        $plainTextContent,
+        $htmlContent
+    );
+
+    $email->setTemplateId("1fa7e21b-9153-4e42-96e4-db52aa1caf05");
+    $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
     $response = ['success'=>true, 'msg'=>"Successfully send the email"];
-  }else{
-    $response = ['success'=>false, 'msg'=>"failed sending the email"];
-  }
+    try {
+        $response_sendgrid = $sendgrid->send($email);
+        $response = ['success'=>true, 'msg'=>"Successfully send the email"];
+    } catch (Exception $e) {
+       $response = ['success'=>false, 'msg'=>$e->getMessage()];
+    }
   return response()->json($response, 201);
 });
 

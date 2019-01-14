@@ -1,9 +1,13 @@
 export const types = {
 	ALL:'ALL',
+	ROLE:'ROLE'
 };
 export const actions = {
 	all: (employeeData) => {
 		return {type: types.ALL,payload:{employeeData:employeeData}}
+	},
+	role: () => {
+		return {type: types.ROLE}
 	}
 }
 
@@ -14,6 +18,7 @@ const initialState = {
 	all: [],
   select:{},
 	selectForm:[],
+	selectRole:[{label:"Agent",value:"AGENT"},{label:"Accountant",value:"ACCOUNTANT"}],
 	selectForm2:[],//without 0 value
 };
 
@@ -44,7 +49,18 @@ export const employeeReducer = (state = initialState, action) => {
 
 			};
 		}
+		case types.ROLE: {
+			var roleSelectData = [];
+			roleSelectData.push({label:"Agent",value:"AGENT"})
+			roleSelectData.push({label:"Accountant",value:"ACCOUNTANT"})
 
+			return {
+				...state,
+				...{selectRole:roleSelectData}
+
+			};
+
+		}
 
 	}
 

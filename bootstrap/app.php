@@ -11,10 +11,16 @@
 |
 */
 
+
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
 
+// $app->configure('mail');
+// $app->configure('services');
+ $app->register(Sichikawa\LaravelSendgridDriver\MailServiceProvider::class);
+
+//unset($app->availableBindings['mailer']);
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces

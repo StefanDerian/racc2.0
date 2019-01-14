@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'sendgrid'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
 
     //commented for sake of testing and will be changed back later on if needed
     //'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-    'host' => env('MAIL_HOST', 'mail.racc.net.au'),
+    'host' => env('MAIL_HOST', 'smtp.sendgrid.net'),
 
     /*
     |--------------------------------------------------------------------------
@@ -58,8 +58,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'stefan.derian@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'RACC'),
     ],
 
     /*

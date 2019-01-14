@@ -8,6 +8,10 @@ import {actions as employeeactions, employeeReducer} from '../redux/employee'
 import {actions as selecteactions, selectReducer} from '../redux/select'
 import {types as messagetypes,actions as messageactions, messageReducer} from '../redux/message'
 import {BASE_API} from '../global/url'
+import { BrowserRouter as Router, Route, Switch,Link, Redirect } from 'react-router-dom';
+
+
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
   failed: (msg) => dispatch(messageactions.failed(msg)),
   loading: (msg) => dispatch(messageactions.loading(msg)),
@@ -38,7 +42,7 @@ class Education extends Component{
   }
   fetchEducation(){
     var self = this;
-    var url = BASE_API+"education/"+this.props.id
+    var url = "/api/education/"+this.props.id
 
     self.props.loading("loading data please wait")
     axios.get(url)
@@ -61,10 +65,12 @@ class Education extends Component{
   onAfterInsertRow(row) {
     //after new education data received
     //deleted because we dont need id
+
     delete row.id;
+    delete row.detailButton;
     row.UserID = this.props.id
     var self = this;
-    var url = BASE_API+"educationinsert/"
+    var url = "/api/educationinsert/"
 
     axios.post(url,row).then(
       function(response){
@@ -96,7 +102,15 @@ class Education extends Component{
     //this is row without id
     var row2 = {...row}
     delete row2.id
-    axios.put(BASE_API+"educationupdate/"+row.id,row2).then(
+    if(row2.detailButton){
+      delete row2.detailButton
+    }
+
+
+
+    console.log(row2)
+
+    axios.put("/api/educationupdate/"+row.id,row2).then(
       function(response){
         return response
       }).then(
@@ -118,7 +132,32 @@ class Education extends Component{
   }
 
   render () {
+
     const statusTypes = ["application submitted","got conditional offer","waiting for document","received COE","visa application"]
+
+
+    const customHiddenPreFilledField = (column, attr, editorClass, ignoreEditable) => {
+      var random = Math.floor(Math.random() * 100);
+      return (
+        <div className="form-group" style={{display:"none"}}>
+          <label>id</label>
+          <input {...attr} value={random}/>
+        </div>
+      );
+
+
+    }
+    const customHiddenField = (column, attr, editorClass, ignoreEditable) => {
+      var random = Math.floor(Math.random() * 100);
+      return (
+        <div className="form-group" style={{display:"none"}}>
+          <label>id</label>
+          <input {...attr} value={random}/>
+        </div>
+      );
+
+
+    }
     const options = {
       afterInsertRow: this.onAfterInsertRow.bind(this)   // A hook for after insert rows
     };
@@ -128,21 +167,37 @@ class Education extends Component{
      afterSaveCell: this.onAfterSaveCell.bind(this),  // a hook for after saving cell
      blurToSave:true
     }
+
+    const linkFormatter = (cell, row) => {
+      return (
+        <Link to ={{pathname:"/Detail/"+this.props.id+"/accountantDetail/"+row.id}} className="btn btn-primary">Update Client Data</Link>
+      )
+    }
+
     return (
       <div>
-        <BootstrapTable cellEdit={ cellEditProp } insertRow = {true} data={this.state.education} options = {options}>
-          <TableHeaderColumn isKey = {true} dataField='id'>id</TableHeaderColumn>
+        <BootstrapTable cellEdit={ cellEditProp } insertRow = {true} data={this.state.education} options = {options} keyBoardNav>
+          <TableHeaderColumn isKey = {true} dataField='id' customInsertEditor={ { getElement: customHiddenPreFilledField } } hidden>id</TableHeaderColumn>
           <TableHeaderColumn dataField='uni' dataSort={ true }>Institution</TableHeaderColumn>
           <TableHeaderColumn dataField='status' editable={ { type: 'select', options: { values: statusTypes } }} dataSort={ true }>Status</TableHeaderColumn>
           <TableHeaderColumn dataField='course' dataSort={ true }>Course</TableHeaderColumn>
           <TableHeaderColumn dataField='Intake' editable={ { type: 'date' } } dataSort={ true }>Intake</TableHeaderColumn>
           <TableHeaderColumn dataField='comment' editable={ { type: 'TextArea' } } dataSort={ true }>Comment</TableHeaderColumn>
+          {localStorage.getItem("type") == "ACCOUNTANT" && <TableHeaderColumn dataField='detailButton' editable={false} dataFormat = {linkFormatter} customInsertEditor={ { getElement: customHiddenField } }>Edit Payment</TableHeaderColumn>}
         </BootstrapTable>
       </div>
     )
   }
+  shouldComponentUpdate(nextProps, nextState){
+    var self = this;
+    if(nextState!== this.state || nextProps!== this.props){
+      return true
 
+    }
+    return false
+  }
   componentWillMount(){
+    console.log(localStorage.getItem("type"))
     this.fetchEducation()
   }
 

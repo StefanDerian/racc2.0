@@ -15,7 +15,7 @@ import {types, actions, authReducer} from '../redux/auth'
 import {messageReducer} from '../redux/message'
 import {actions as employeeActions, employeeReducer} from '../redux/employee'
 import {actions as selectActions, selectReducer} from '../redux/select'
-
+import {actions as accountantActions, accountantReducer} from '../redux/accountant'
 
 import Header from './Header' //separate header
 import Message from './Message' //separate header
@@ -25,6 +25,8 @@ import Detail from './Detail'
 import CreateClient from './CreateClient'
 import CreateEmployee from './CreateEmployee'
 import UpdateEmployee from './UpdateEmployee'
+import Accountant from './Accountant'
+import Home2 from './Home2'
 
 import axios from 'axios'
 
@@ -42,7 +44,8 @@ const reducer = combineReducers({
 	authReducer,
 	messageReducer,
 	employeeReducer,
-	selectReducer
+	selectReducer,
+	accountantReducer
 
 })
 const loggerMiddleware = createLogger()
@@ -99,10 +102,12 @@ export default class Example extends Component {
                   <Switch>
                         <PrivateRoute exact path="/" component={Home} />
 												<PrivateRoute path="/Employee" component={Employee} />
-												<PrivateRoute path="/Detail/:id/:type" component={Detail} />
+												<PrivateRoute path="/Detail/:id/:type/:eduId?" component={Detail} />
 												<PrivateRoute path="/CreateClient" component={CreateClient} />
 												<PrivateRoute path="/CreateEmployee" component={CreateEmployee} />
 												<PrivateRoute path="/UpdateEmployee/:id" component={UpdateEmployee} />
+												<PrivateRoute path="/Accountant" component={Accountant} />
+												<PrivateRoute path="/Home2" component={Home2} />
                         <Route path="/Login" component={Login}/>
                         <Route path="/Register" component={CreateClient}/>
                   </Switch>
@@ -120,7 +125,7 @@ export default class Example extends Component {
       console.log(localStorage.getItem('user_auth'))
 
 			//employees data
-			axios.get(BASE_API+"employeedata/0")
+			axios.get("/api/employeedata/0")
 			.then(res => res)
 			.then(function(response){
 				var employees = response.data.data

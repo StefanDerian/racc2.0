@@ -45,7 +45,7 @@ class CreateEmployee extends Component{
   createEmployee(values){
     var self = this
 
-    values.UserType = "AGENT"
+    //values.UserType = "AGENT"
 
 
 

@@ -28,7 +28,7 @@ class UpdateClient extends Component{
     this.state = {
       isRedirect:false
     }
-  
+
   }
 
 
@@ -37,7 +37,7 @@ class UpdateClient extends Component{
     var self = this
     self.props.loading("Updating Client Please Wait")
 
-    axios.put(BASE_API+"updateclient/"+this.props.id,values).then(
+    axios.put("/api/updateclient/"+this.props.id,values).then(
       function(response){
         return response
       }).then(

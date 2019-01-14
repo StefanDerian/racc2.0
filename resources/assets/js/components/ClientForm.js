@@ -92,11 +92,11 @@ class ClientForm extends Component{
         function(result){
           if(result.data.success){
             var data = result.data.data
-            if(data.length > 0){
+          //  if(data.length > 0){
               //if exist
-              self.props.failed("Sorry, The First Name and Last Name already exist")
-              self.toggleModal("Sorry, The First Name and Last Name already exist")
-            }else{
+            //  self.props.failed("Sorry, The First Name and Last Name already exist")
+            //  self.toggleModal("Sorry, The First Name and Last Name already exist")
+          //  }else{
               //if does not exist
               self.props.onSubmit(values)
               if(self.props.id){
@@ -106,7 +106,7 @@ class ClientForm extends Component{
               if(!self.props.isAuthenticated){
                 self.resetForm()
               }
-            }
+            //}
           }else{
             self.props.failed("failed validating")
           }
@@ -186,6 +186,8 @@ class ClientForm extends Component{
                             </div>
                           </div>
                           {/*end Nationality*/}
+
+
 
                           {/*Date of Birth*/}
                           <div className = "col">
@@ -392,9 +394,9 @@ class ClientForm extends Component{
                         {/*current Completion date*/}
                         <div className = "col">
                           <div className = "form-group"  >
-                            <label htmlFor="uni_Compl">Estimated Completion Date:</label>
+                            <label htmlFor="Uni_compl">Estimated Completion Date:</label>
 
-                            <RequiredText type="Date" id="uni_Compl" className="form-control search-form" field="uni_Compl"/>
+                            <RequiredText type="Date" id="Uni_compl" className="form-control search-form" field="Uni_compl"/>
 
                           </div>
                         </div>
