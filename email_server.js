@@ -5,7 +5,7 @@ const path = require('path')
 const Promise = require('bluebird')
 const app = express();
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey('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');
+sgMail.setApiKey('Secret');
 
 const PORT = process.env.PORT || 3002
 
