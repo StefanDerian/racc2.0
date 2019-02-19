@@ -27,5 +27,9 @@ class PointtypeAddHintColumn extends Migration
     public function down()
     {
         //
+        Schema::table('pointtype', function (Blueprint $table) {
+          $table->dropColumn(['hint']);
+        });
+
     }
 }

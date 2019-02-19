@@ -27,5 +27,9 @@ class PointtypeAlterHintColumn extends Migration
     public function down()
     {
         //
+        //altering hint column type to text
+        Schema::table('pointtype', function (Blueprint $table) {
+          $table->string('hint')->change();
+        });
     }
 }
