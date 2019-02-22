@@ -51,7 +51,7 @@ class CreateEmployee extends Component{
 
     self.props.loading("Creating Employee Please Wait")
 
-    axios.post(BASE_API+"createemployee",values).then(
+    axios.post("/api/createemployee",values).then(
       function(response){
         return response
       }).then(

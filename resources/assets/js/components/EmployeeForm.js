@@ -240,7 +240,7 @@ class EmployeeForm extends Component{
   componentWillMount(){
     var self = this
     if(this.props.id){
-      axios.get(BASE_API+"singleemployee/"+this.props.id).then(
+      axios.get("/api/singleemployee/"+this.props.id).then(
         function(response){
           return response
         }).then(

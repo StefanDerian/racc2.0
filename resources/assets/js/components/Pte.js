@@ -76,7 +76,7 @@ class Pte extends Component{
     if(this.state.new){
         // if the pte data does not exists yet then it will create new one
       var insertData = []
-      url = BASE_API+"migrationinsert/"
+      url = "/api/migrationinsert/"
       for (let [key, value] of Object.entries(this.state.ptedata)) {
         if(!value.current)
           value.current = 0
@@ -132,7 +132,7 @@ class Pte extends Component{
 
       }
 
-      url = BASE_API+"migrationupdate/"+this.props.id
+      url = "/api/migrationupdate/"+this.props.id
       axios.put(url,updateData).then(function(response){
         return response
       }).then(
@@ -160,7 +160,7 @@ class Pte extends Component{
     console.log(this.props)
 
     var self = this
-    axios.get(BASE_API+"migration/"+this.props.id).then(
+    axios.get("/api/migration/"+this.props.id).then(
       function(response){
         return response
       }).then(
@@ -327,7 +327,7 @@ class Pte extends Component{
             )
           }
         </Form>
-        <EmailForm id = {this.props.id} migrationData={this.state.pteData} url ={"sendmigrationemail/"+this.props.id} ></EmailForm>
+        <EmailForm id = {this.props.id} migrationData={this.state.pteData} url ={"/api/sendmigrationemail/"+this.props.id} ></EmailForm>
       </div>
     )
   }

@@ -111,7 +111,7 @@
       //serialize it so it can be sent to the laravel router
       const serialized = JSON.stringify(object);
 
-      axios.put(BASE_API+"updateclient/"+row.clientId+"/"+serialized)
+      axios.put("/api/updateclient/"+row.clientId+"/"+serialized)
       .then(function(response){
 
       }).catch(function(error){

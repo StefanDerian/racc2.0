@@ -61,7 +61,7 @@ class CreateClient extends Component{
     var self = this
     self.props.loading("Updating Client Please Wait")
 
-    axios.post(BASE_API+"createclient",values).then(
+    axios.post("/api/createclient",values).then(
       function(response){
         return response
       }).then(

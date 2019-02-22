@@ -55,7 +55,7 @@ class EmailForm extends Component{
       }
     }
 
-    axios.post(BASE_API+this.props.url,data).then(function(response){
+    axios.post(this.props.url,data).then(function(response){
       return response
     }).then(
       function(result){
@@ -104,7 +104,7 @@ class EmailForm extends Component{
   componentWillMount(){
     var self = this
     //getting ptedata
-    axios.get(BASE_API+"migration/"+this.props.id).then(
+    axios.get("/api/migration/"+this.props.id).then(
       function(response){
         return response
       }).then(
@@ -160,7 +160,7 @@ class EmailForm extends Component{
     )
 
     //get client data
-    axios.get(BASE_API+"singleclient/"+this.props.id).then(
+    axios.get("/api/singleclient/"+this.props.id).then(
       function(response){
         return response
       }).then(

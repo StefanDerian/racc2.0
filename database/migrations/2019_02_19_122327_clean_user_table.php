@@ -15,7 +15,7 @@ class CleanUserTable extends Migration
     {
         //
         Schema::table('user', function (Blueprint $table) {
-            $table->dropColumn(['PreferName','Gender','UserType','Csuburb','Ccountry','Hcity','Hstate','Hcountry','Hpostcode',
+            $table->dropColumn(['PreferName','Gender','UserType','Csuburb','Hcity','Hstate','Hcountry','Hpostcode',
                                 'CurrentPointTest','GoalPointTest','Comment']);
         });
     }
@@ -33,7 +33,6 @@ class CleanUserTable extends Migration
             $table->string('Gender');
             $table->string('UserType');
             $table->string('Csuburb');
-            $table->string('Ccountry');
             $table->string('Hcity');
             $table->string('Hstate');
             $table->string('Hcountry');

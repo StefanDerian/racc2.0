@@ -37,7 +37,7 @@ class UpdateEmployee extends Component{
     var self = this
     self.props.loading("Updating Client Please Wait")
 
-    axios.put(BASE_API+"updateemployee/"+this.props.match.params.id,values).then(
+    axios.put("/api/updateemployee/"+this.props.match.params.id,values).then(
       function(response){
         return response
       }).then(

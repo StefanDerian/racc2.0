@@ -117,7 +117,7 @@
       //serialize it so it can be sent to the laravel router
       const serialized = JSON.stringify(object);
 
-      axios.put(BASE_API+"updateclient/"+row.clientId+"/"+serialized)
+      axios.put("/api/updateclient/"+row.clientId+"/"+serialized)
       .then(function(response){
 
       }).catch(function(error){
@@ -607,7 +607,7 @@
         }
         componentWillMount(){
           var self = this;
-          var url = BASE_API+"clientdata"
+          var url = "/api/clientdata"
           // to determine which is for agent and manager
           if(localStorage.getItem("type") != "MANAGER"){
             url += "/"+ localStorage.getItem("id")

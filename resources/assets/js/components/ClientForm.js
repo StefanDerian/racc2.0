@@ -75,7 +75,7 @@ class ClientForm extends Component{
 
     //if it comes to creating the client it must check the first and last name availability
     var self = this
-    var clienturl = BASE_API+"clientcustomdata";
+    var clienturl = "/api/clientcustomdata";
 
     if(this.props.id){
       clienturl += "/"+this.props.id
@@ -521,7 +521,7 @@ class ClientForm extends Component{
     //if the props of client id is given otherwise the data will not be fetched
     var self = this
     if(this.props.id){
-      axios.get(BASE_API+"singleclient/"+this.props.id).then(
+      axios.get("/api/singleclient/"+this.props.id).then(
         function(response){
           return response
         }).then(

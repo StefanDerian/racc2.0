@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 484:
+/***/ 485:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18,14 +18,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__redux_select__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__redux_message__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_reactstrap__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_react_router_dom__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_react_router_dom__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__global_url__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_react_motion_drawer__ = __webpack_require__(188);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_react_motion_drawer__ = __webpack_require__(189);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_react_motion_drawer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_react_motion_drawer__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_react_form__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_react_form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_react_form__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_react_easy_print__ = __webpack_require__(189);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__PrintElement__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_react_easy_print__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__PrintElement__ = __webpack_require__(191);
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -173,7 +173,7 @@ var Home = function (_Component) {
       //serialize it so it can be sent to the laravel router
       var serialized = JSON.stringify(object);
 
-      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.put(__WEBPACK_IMPORTED_MODULE_10__global_url__["a" /* BASE_API */] + "updateclient/" + row.clientId + "/" + serialized).then(function (response) {}).catch(function (error) {});
+      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.put("/api/updateclient/" + row.clientId + "/" + serialized).then(function (response) {}).catch(function (error) {});
     }
 
     //onselected row

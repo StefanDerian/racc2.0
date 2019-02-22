@@ -39,7 +39,7 @@ class Employee extends Component{
   fetchEmployees(){
     //employees data
     var self = this
-    axios.get(BASE_API+"employeedata/1")
+    axios.get("/api/employeedata/1")
     .then(res => res)
     .then(function(response){
       var employees = response.data.data

@@ -37,7 +37,7 @@ class Note extends Component{
   **/
   fetchNotes(){
     var self = this
-    axios.get(BASE_API+"note/"+this.props.id).then(
+    axios.get("/api/note/"+this.props.id).then(
       function(response){
         return response
       }).then(
@@ -62,7 +62,7 @@ class Note extends Component{
     //combined between fields and values
     var combined = {[cellName]:values}
     console.log(combined)
-    axios.put(BASE_API+"updatenote/"+row.ID,combined).then(
+    axios.put("/api/updatenote/"+row.ID,combined).then(
       function(response){
         return response
       }).then(
@@ -95,7 +95,7 @@ class Note extends Component{
 
 
     console.log("submit notes",values)
-    axios.post(BASE_API+"createnote/",values).then(
+    axios.post("/api/createnote/",values).then(
       function(response){
         return response
       }).then(
